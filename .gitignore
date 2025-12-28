@@ -1,0 +1,11 @@
+# --- GIZLI DOSYALAR (Local Secrets) ---
+config.py
+.env
+
+# --- GEREKSIZ DOSYALAR (System Junk) ---
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+venv/
+botenv/
