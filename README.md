@@ -92,7 +92,7 @@ To ensure uninterrupted operation after SSH disconnections, the bot is executed 
 
 screen -S borsa
 python3 main.py
-# Detach with: Ctrl + A then D
+
 
 
 This guarantees:
