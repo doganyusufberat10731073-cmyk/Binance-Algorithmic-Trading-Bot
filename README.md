@@ -68,3 +68,70 @@ This repository contains the **execution logic and architecture**.
 ## ⚠️ Disclaimer
 
 This software is for educational and portfolio demonstration purposes. Algorithmic trading involves significant financial risk.
+
+
+## ⚙️ Deployment Notes (Linux Permissions & Production Setup)
+Binding to Privileged Ports (Port 80)
+
+On Linux systems, binding to ports below 1024 (such as Port 80) is restricted to privileged processes.
+
+Instead of running the bot as root, the following capability is explicitly granted to the Python binary:
+
+sudo setcap 'cap_net_bind_service=+ep' /usr/bin/python3.12
+
+
+This allows the Flask application to bind securely to Port 80 while preserving best security practices.
+
+Verification:
+
+getcap /usr/bin/python3.12
+
+Background Execution & Process Persistence
+
+To ensure uninterrupted operation after SSH disconnections, the bot is executed inside a detached GNU Screen session:
+
+screen -S borsa
+python3 main.py
+# Detach with: Ctrl + A then D
+
+
+This guarantees:
+
+No dependency on the developer’s local machine
+
+Continuous 24/7 execution
+
+Safe reattachment for monitoring and logs
+
+AWS Firewall Configuration (Security Groups)
+
+Inbound rules configured on AWS EC2 Security Group:
+
+22 / TCP – SSH access
+
+80 / TCP – TradingView Webhook listener
+
+Outbound traffic is unrestricted to allow Binance API communication.
+
+Webhook Health Verification
+
+Incoming webhook traffic can be confirmed via server logs.
+External GET requests to / correctly return 404, indicating:
+
+Server is reachable
+
+Flask is running
+
+Only /webhook POST requests are accepted by design
+
+## ✅ Production Status
+
+Webhook reception: Active
+
+Binance Futures execution: Verified
+
+Hedge Mode: Enabled
+
+Dynamic risk sizing: Operational
+
+Server uptime: 24/7 AWS-backed
